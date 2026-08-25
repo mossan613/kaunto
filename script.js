@@ -1,4 +1,7 @@
+// ==============================
 // 交通量データ
+// ==============================
+
 const counts = {
     up: {
         car: 0,
@@ -20,7 +23,10 @@ const counts = {
 };
 
 
+// ==============================
 // カウントを増減する
+// ==============================
+
 function changeCount(direction, type, amount) {
 
     counts[direction][type] += amount;
@@ -38,7 +44,10 @@ function changeCount(direction, type, amount) {
 }
 
 
+// ==============================
 // 数字を画面に表示
+// ==============================
+
 function updateDisplay(direction, type) {
 
     const element = document.getElementById(
@@ -49,7 +58,10 @@ function updateDisplay(direction, type) {
 }
 
 
+// ==============================
 // 上り・下りの合計を計算
+// ==============================
+
 function updateTotal(direction) {
 
     const data = counts[direction];
@@ -68,7 +80,10 @@ function updateTotal(direction) {
 }
 
 
+// ==============================
 // 全てリセット
+// ==============================
+
 function resetAll() {
 
     if (!confirm("全てのカウントをリセットしますか？")) {
@@ -99,3 +114,72 @@ function resetAll() {
         updateTotal(direction);
     });
 }
+
+
+// ==============================
+// キーボード入力
+// ==============================
+//
+// 上り
+// 1 = 普通車
+// 2 = トラック
+// 3 = バス
+// 4 = バイク
+// 5 = 歩行者
+// 6 = 自転車
+//
+// 下り
+// Q = 普通車
+// W = トラック
+// E = バス
+// R = バイク
+// T = 歩行者
+// Y = 自転車
+//
+// ==============================
+
+document.addEventListener("keydown", function(event) {
+
+    const keyMap = {
+
+        // --------------------------
+        // 上り
+        // --------------------------
+
+        "1": ["up", "car"],
+        "2": ["up", "truck"],
+        "3": ["up", "bus"],
+        "4": ["up", "bike"],
+        "5": ["up", "person"],
+        "6": ["up", "bicycle"],
+
+
+        // --------------------------
+        // 下り
+        // --------------------------
+
+        "q": ["down", "car"],
+        "w": ["down", "truck"],
+        "e": ["down", "bus"],
+        "r": ["down", "bike"],
+        "t": ["down", "person"],
+        "y": ["down", "bicycle"]
+    };
+
+
+    // 大文字・小文字を統一
+    const key = event.key.toLowerCase();
+
+
+    // 登録されているキーならカウント
+    if (keyMap[key]) {
+
+        const [direction, type] = keyMap[key];
+
+        // 既存のカウント機能を使用
+        changeCount(direction, type, 1);
+
+        // キーを押し続けたときの連続入力を防止
+        event.preventDefault();
+    }
+});
