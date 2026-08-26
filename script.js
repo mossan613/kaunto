@@ -24,6 +24,70 @@ const counts = {
 
 
 // ==============================
+// LocalStorageの保存キー
+// ==============================
+
+const STORAGE_KEY = "trafficCounts";
+
+
+// ==============================
+// LocalStorageに保存
+// ==============================
+
+function saveCounts() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(counts)
+    );
+}
+
+
+// ==============================
+// LocalStorageから読み込み
+// ==============================
+
+function loadCounts() {
+
+    const savedData = localStorage.getItem(STORAGE_KEY);
+
+    // 保存されたデータがなければ終了
+    if (!savedData) {
+        return;
+    }
+
+    try {
+
+        const savedCounts = JSON.parse(savedData);
+
+        // 上りのデータを復元
+        if (savedCounts.up) {
+            Object.assign(
+                counts.up,
+                savedCounts.up
+            );
+        }
+
+        // 下りのデータを復元
+        if (savedCounts.down) {
+            Object.assign(
+                counts.down,
+                savedCounts.down
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "LocalStorageのデータ読み込みに失敗しました。",
+            error
+        );
+
+    }
+}
+
+
+// ==============================
 // カウントを増減する
 // ==============================
 
@@ -36,11 +100,14 @@ function changeCount(direction, type, amount) {
         counts[direction][type] = 0;
     }
 
-    // 画面を更新
+    // 数字を画面に表示
     updateDisplay(direction, type);
 
     // 合計を更新
     updateTotal(direction);
+
+    // LocalStorageに保存
+    saveCounts();
 }
 
 
@@ -81,6 +148,43 @@ function updateTotal(direction) {
 
 
 // ==============================
+// 全ての表示を更新
+// ==============================
+
+function updateAllDisplay() {
+
+    const types = [
+        "car",
+        "truck",
+        "bus",
+        "bike",
+        "person",
+        "bicycle"
+    ];
+
+    const directions = [
+        "up",
+        "down"
+    ];
+
+    directions.forEach(direction => {
+
+        types.forEach(type => {
+
+            updateDisplay(
+                direction,
+                type
+            );
+
+        });
+
+        updateTotal(direction);
+
+    });
+}
+
+
+// ==============================
 // 全てリセット
 // ==============================
 
@@ -99,7 +203,10 @@ function resetAll() {
         "bicycle"
     ];
 
-    const directions = ["up", "down"];
+    const directions = [
+        "up",
+        "down"
+    ];
 
     directions.forEach(direction => {
 
@@ -107,12 +214,19 @@ function resetAll() {
 
             counts[direction][type] = 0;
 
-            updateDisplay(direction, type);
+            updateDisplay(
+                direction,
+                type
+            );
 
         });
 
         updateTotal(direction);
+
     });
+
+    // リセットした状態をLocalStorageに保存
+    saveCounts();
 }
 
 
@@ -164,6 +278,7 @@ document.addEventListener("keydown", function(event) {
         "r": ["down", "bike"],
         "t": ["down", "person"],
         "y": ["down", "bicycle"]
+
     };
 
 
@@ -177,9 +292,25 @@ document.addEventListener("keydown", function(event) {
         const [direction, type] = keyMap[key];
 
         // 既存のカウント機能を使用
-        changeCount(direction, type, 1);
+        changeCount(
+            direction,
+            type,
+            1
+        );
 
         // キーを押し続けたときの連続入力を防止
         event.preventDefault();
     }
+
 });
+
+
+// ==============================
+// ページ読み込み時の処理
+// ==============================
+
+// LocalStorageから以前のデータを読み込む
+loadCounts();
+
+// 読み込んだデータを画面に表示
+updateAllDisplay();
