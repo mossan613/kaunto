@@ -1,8 +1,9 @@
-// ==============================
+// ========================================
 // 交通量データ
-// ==============================
+// ========================================
 
 const counts = {
+
     up: {
         car: 0,
         truck: 0,
@@ -20,118 +21,183 @@ const counts = {
         person: 0,
         bicycle: 0
     }
+
 };
 
 
-// ==============================
-// LocalStorageの保存キー
-// ==============================
+// ========================================
+// Pythonローカルサーバー
+// ========================================
 
-const STORAGE_KEY = "trafficCounts";
-
-
-// ==============================
-// LocalStorageに保存
-// ==============================
-
-function saveCounts() {
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(counts)
-    );
-}
+const SERVER_URL = "http://127.0.0.1:8765";
 
 
-// ==============================
-// LocalStorageから読み込み
-// ==============================
+// ========================================
+// 種類
+// ========================================
 
-function loadCounts() {
+const types = [
+    "car",
+    "truck",
+    "bus",
+    "bike",
+    "person",
+    "bicycle"
+];
 
-    const savedData = localStorage.getItem(STORAGE_KEY);
 
-    // 保存されたデータがなければ終了
-    if (!savedData) {
-        return;
-    }
+const directions = [
+    "up",
+    "down"
+];
+
+
+// ========================================
+// Pythonから現在のカウントを取得
+// ========================================
+
+async function loadCounts() {
 
     try {
 
-        const savedCounts = JSON.parse(savedData);
+        const response = await fetch(
+            `${SERVER_URL}/state`,
+            {
+                cache: "no-store"
+            }
+        );
 
-        // 上りのデータを復元
-        if (savedCounts.up) {
-            Object.assign(
-                counts.up,
-                savedCounts.up
-            );
+        if (!response.ok) {
+            throw new Error("通信エラー");
         }
 
-        // 下りのデータを復元
-        if (savedCounts.down) {
-            Object.assign(
-                counts.down,
-                savedCounts.down
-            );
-        }
+        const data = await response.json();
+
+
+        directions.forEach(direction => {
+
+            types.forEach(type => {
+
+                if (
+                    data[direction] &&
+                    typeof data[direction][type] === "number"
+                ) {
+
+                    counts[direction][type] =
+                        data[direction][type];
+
+                }
+
+            });
+
+        });
+
+
+        updateAllDisplay();
+
 
     } catch (error) {
 
-        console.error(
-            "LocalStorageのデータ読み込みに失敗しました。",
+        console.log(
+            "Pythonサーバーに接続できません。",
             error
         );
 
     }
+
 }
 
 
-// ==============================
-// カウントを増減する
-// ==============================
+// ========================================
+// ＋／－ボタン
+// ========================================
 
-function changeCount(direction, type, amount) {
+async function changeCount(
+    direction,
+    type,
+    amount
+) {
 
-    counts[direction][type] += amount;
+    let endpoint;
 
-    // 0未満にはしない
-    if (counts[direction][type] < 0) {
-        counts[direction][type] = 0;
+    if (amount > 0) {
+
+        endpoint = "increment";
+
+    } else {
+
+        endpoint = "decrement";
+
     }
 
-    // 数字を画面に表示
-    updateDisplay(direction, type);
 
-    // 合計を更新
-    updateTotal(direction);
+    try {
 
-    // LocalStorageに保存
-    saveCounts();
+        const response = await fetch(
+            `${SERVER_URL}/${endpoint}` +
+            `?direction=${direction}` +
+            `&type=${type}`,
+            {
+                cache: "no-store"
+            }
+        );
+
+
+        if (!response.ok) {
+            throw new Error("カウント変更エラー");
+        }
+
+
+        await loadCounts();
+
+
+    } catch (error) {
+
+        console.error(
+            "カウント変更エラー:",
+            error
+        );
+
+    }
+
 }
 
 
-// ==============================
-// 数字を画面に表示
-// ==============================
+// ========================================
+// 表示更新
+// ========================================
 
-function updateDisplay(direction, type) {
+function updateDisplay(
+    direction,
+    type
+) {
 
-    const element = document.getElementById(
-        `${direction}-${type}`
-    );
+    const element =
+        document.getElementById(
+            `${direction}-${type}`
+        );
 
-    element.textContent = counts[direction][type];
+
+    if (!element) {
+        return;
+    }
+
+
+    element.textContent =
+        counts[direction][type];
+
 }
 
 
-// ==============================
-// 上り・下りの合計を計算
-// ==============================
+// ========================================
+// 合計更新
+// ========================================
 
 function updateTotal(direction) {
 
-    const data = counts[direction];
+    const data =
+        counts[direction];
+
 
     const total =
         data.car +
@@ -141,32 +207,29 @@ function updateTotal(direction) {
         data.person +
         data.bicycle;
 
-    document.getElementById(
-        `${direction}-total`
-    ).textContent = total;
+
+    const element =
+        document.getElementById(
+            `${direction}-total`
+        );
+
+
+    if (element) {
+
+        element.textContent =
+            total;
+
+    }
+
 }
 
 
-// ==============================
-// 全ての表示を更新
-// ==============================
+// ========================================
+// 全表示更新
+// ========================================
 
 function updateAllDisplay() {
 
-    const types = [
-        "car",
-        "truck",
-        "bus",
-        "bike",
-        "person",
-        "bicycle"
-    ];
-
-    const directions = [
-        "up",
-        "down"
-    ];
-
     directions.forEach(direction => {
 
         types.forEach(type => {
@@ -178,139 +241,75 @@ function updateAllDisplay() {
 
         });
 
+
         updateTotal(direction);
 
     });
+
 }
 
 
-// ==============================
-// 全てリセット
-// ==============================
+// ========================================
+// 全リセット
+// ========================================
 
-function resetAll() {
+async function resetAll() {
 
-    if (!confirm("全てのカウントをリセットしますか？")) {
+    if (
+        !confirm(
+            "全てのカウントをリセットしますか？"
+        )
+    ) {
+
         return;
+
     }
 
-    const types = [
-        "car",
-        "truck",
-        "bus",
-        "bike",
-        "person",
-        "bicycle"
-    ];
 
-    const directions = [
-        "up",
-        "down"
-    ];
+    try {
 
-    directions.forEach(direction => {
-
-        types.forEach(type => {
-
-            counts[direction][type] = 0;
-
-            updateDisplay(
-                direction,
-                type
+        const response =
+            await fetch(
+                `${SERVER_URL}/reset`
             );
 
-        });
 
-        updateTotal(direction);
+        if (!response.ok) {
 
-    });
+            throw new Error(
+                "リセットエラー"
+            );
 
-    // リセットした状態をLocalStorageに保存
-    saveCounts();
-}
-
-
-// ==============================
-// キーボード入力
-// ==============================
-//
-// 上り
-// 1 = 普通車
-// 2 = トラック
-// 3 = バス
-// 4 = バイク
-// 5 = 歩行者
-// 6 = 自転車
-//
-// 下り
-// Q = 普通車
-// W = トラック
-// E = バス
-// R = バイク
-// T = 歩行者
-// Y = 自転車
-//
-// ==============================
-
-document.addEventListener("keydown", function(event) {
-
-    const keyMap = {
-
-        // --------------------------
-        // 上り
-        // --------------------------
-
-        "1": ["up", "car"],
-        "2": ["up", "truck"],
-        "3": ["up", "bus"],
-        "4": ["up", "bike"],
-        "5": ["up", "person"],
-        "6": ["up", "bicycle"],
+        }
 
 
-        // --------------------------
-        // 下り
-        // --------------------------
-
-        "q": ["down", "car"],
-        "w": ["down", "truck"],
-        "e": ["down", "bus"],
-        "r": ["down", "bike"],
-        "t": ["down", "person"],
-        "y": ["down", "bicycle"]
-
-    };
+        await loadCounts();
 
 
-    // 大文字・小文字を統一
-    const key = event.key.toLowerCase();
+    } catch (error) {
 
-
-    // 登録されているキーならカウント
-    if (keyMap[key]) {
-
-        const [direction, type] = keyMap[key];
-
-        // 既存のカウント機能を使用
-        changeCount(
-            direction,
-            type,
-            1
+        console.error(
+            "リセットエラー:",
+            error
         );
 
-        // キーを押し続けたときの連続入力を防止
-        event.preventDefault();
     }
 
-});
+}
 
 
-// ==============================
-// ページ読み込み時の処理
-// ==============================
+// ========================================
+// 0.1秒ごとにPythonと同期
+// ========================================
 
-// LocalStorageから以前のデータを読み込む
+setInterval(
+    loadCounts,
+    100
+);
+
+
+// ========================================
+// 起動時
+// ========================================
+
 loadCounts();
-
-// 読み込んだデータを画面に表示
-updateAllDisplay();

@@ -32,130 +32,61 @@ h2 {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* 上り */
 .up h2 {
     color: #1976d2;
 }
 
-/* 下り */
 .down h2 {
     color: #d32f2f;
 }
 
-
-/* =========================
-   カウント行
-   ========================= */
-
 .count-row {
     display: grid;
-
-    /* 名前 / キー / - / 数字 / + */
-    grid-template-columns: 100px 40px 50px 70px 50px;
-
+    grid-template-columns: 100px 50px 70px 50px;
     align-items: center;
     justify-content: center;
-
     gap: 10px;
     margin: 12px 0;
-
     font-size: 18px;
 }
-
-
-/* =========================
-   キー表示
-   ========================= */
-
-.key {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 40px;
-    height: 40px;
-
-    background-color: #333333;
-    color: white;
-
-    border-radius: 6px;
-
-    font-size: 18px;
-    font-weight: bold;
-
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
-}
-
-
-/* =========================
-   ＋／−ボタン
-   ========================= */
 
 .count-row button {
     width: 50px;
     height: 45px;
-
     font-size: 24px;
-
     border: none;
     border-radius: 8px;
-
     background-color: #eeeeee;
-
     cursor: pointer;
-
-    touch-action: manipulation;
 }
 
 .count-row button:hover {
     background-color: #cccccc;
 }
 
-
-/* カウント数字 */
-.count-row span:nth-child(4) {
+.count-row span:nth-child(3) {
     font-size: 24px;
     font-weight: bold;
 }
 
-
-/* =========================
-   合計
-   ========================= */
-
 .total {
     margin-top: 20px;
     padding: 15px;
-
     background-color: #eeeeee;
-
     border-radius: 10px;
-
     font-size: 20px;
     font-weight: bold;
 }
 
-
-/* =========================
-   リセットボタン
-   ========================= */
-
 .reset {
     margin-top: 25px;
-
     padding: 15px 40px;
-
     font-size: 18px;
-
     color: white;
     background-color: #555555;
-
     border: none;
     border-radius: 10px;
-
     cursor: pointer;
-
-    touch-action: manipulation;
 }
 
 .reset:hover {
@@ -163,19 +94,28 @@ h2 {
 }
 
 
-/* =========================
-   スマホ・タブレット用
-   ========================= */
+/* ==================================================
+   Python接続状態
+   ================================================== */
+
+body::after {
+    content: "● キーボード監視";
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    padding: 6px 10px;
+    color: white;
+    background-color: #4caf50;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   スマホ・タブレット
+   ================================================== */
 
 @media (max-width: 850px) {
-
-    body {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 26px;
-    }
 
     .container {
         flex-direction: column;
@@ -185,25 +125,5 @@ h2 {
     .direction {
         width: 100%;
         max-width: 500px;
-        padding: 15px;
-    }
-
-    .count-row {
-        grid-template-columns:
-            1fr 40px 50px 70px 50px;
-
-        gap: 8px;
-        margin: 10px 0;
-    }
-
-    .count-row button {
-        width: 50px;
-        height: 50px;
-        font-size: 26px;
-    }
-
-    .key {
-        width: 40px;
-        height: 40px;
     }
 }
