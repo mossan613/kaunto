@@ -16,118 +16,193 @@
 
     <div class="container">
 
-        <!-- 上り -->
+        <!-- =========================
+             上り
+        ========================== -->
+
         <section class="direction up">
 
             <h2>⬆ 上り</h2>
 
             <div class="count-row">
                 <span>普通車</span>
+                <span class="key">1</span>
+
                 <button onclick="changeCount('up', 'car', -1)">-</button>
+
                 <span id="up-car">0</span>
+
                 <button onclick="changeCount('up', 'car', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>トラック</span>
+                <span class="key">2</span>
+
                 <button onclick="changeCount('up', 'truck', -1)">-</button>
+
                 <span id="up-truck">0</span>
+
                 <button onclick="changeCount('up', 'truck', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>バス</span>
+                <span class="key">3</span>
+
                 <button onclick="changeCount('up', 'bus', -1)">-</button>
+
                 <span id="up-bus">0</span>
+
                 <button onclick="changeCount('up', 'bus', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>バイク</span>
+                <span class="key">4</span>
+
                 <button onclick="changeCount('up', 'bike', -1)">-</button>
+
                 <span id="up-bike">0</span>
+
                 <button onclick="changeCount('up', 'bike', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>歩行者</span>
+                <span class="key">5</span>
+
                 <button onclick="changeCount('up', 'person', -1)">-</button>
+
                 <span id="up-person">0</span>
+
                 <button onclick="changeCount('up', 'person', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>自転車</span>
+                <span class="key">6</span>
+
                 <button onclick="changeCount('up', 'bicycle', -1)">-</button>
+
                 <span id="up-bicycle">0</span>
+
                 <button onclick="changeCount('up', 'bicycle', 1)">+</button>
             </div>
 
+
             <div class="total">
-                上り合計：<span id="up-total">0</span>
+                上り合計：
+                <span id="up-total">0</span>
             </div>
 
         </section>
 
 
-        <!-- 下り -->
+        <!-- =========================
+             下り
+        ========================== -->
+
         <section class="direction down">
 
             <h2>⬇ 下り</h2>
 
+
             <div class="count-row">
                 <span>普通車</span>
+                <span class="key">Q</span>
+
                 <button onclick="changeCount('down', 'car', -1)">-</button>
+
                 <span id="down-car">0</span>
+
                 <button onclick="changeCount('down', 'car', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>トラック</span>
+                <span class="key">W</span>
+
                 <button onclick="changeCount('down', 'truck', -1)">-</button>
+
                 <span id="down-truck">0</span>
+
                 <button onclick="changeCount('down', 'truck', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>バス</span>
+                <span class="key">E</span>
+
                 <button onclick="changeCount('down', 'bus', -1)">-</button>
+
                 <span id="down-bus">0</span>
+
                 <button onclick="changeCount('down', 'bus', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>バイク</span>
+                <span class="key">R</span>
+
                 <button onclick="changeCount('down', 'bike', -1)">-</button>
+
                 <span id="down-bike">0</span>
+
                 <button onclick="changeCount('down', 'bike', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>歩行者</span>
+                <span class="key">T</span>
+
                 <button onclick="changeCount('down', 'person', -1)">-</button>
+
                 <span id="down-person">0</span>
+
                 <button onclick="changeCount('down', 'person', 1)">+</button>
             </div>
 
+
             <div class="count-row">
                 <span>自転車</span>
+                <span class="key">Y</span>
+
                 <button onclick="changeCount('down', 'bicycle', -1)">-</button>
+
                 <span id="down-bicycle">0</span>
+
                 <button onclick="changeCount('down', 'bicycle', 1)">+</button>
             </div>
 
+
             <div class="total">
-                下り合計：<span id="down-total">0</span>
+                下り合計：
+                <span id="down-total">0</span>
             </div>
 
         </section>
 
     </div>
 
+
+    <!-- =========================
+         リセット
+    ========================== -->
+
     <button class="reset" onclick="resetAll()">
         🔄 全てリセット
     </button>
+
 
     <script src="script.js"></script>
 

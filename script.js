@@ -1,102 +1,159 @@
-// ========================================
-// 交通量データ
-// ========================================
+// ============================================================
+// 交通量カウント
+// ============================================================
+
+
+// ============================================================
+// Pythonローカルサーバー
+// ============================================================
+
+const SERVER_URL =
+    "http://127.0.0.1:8765";
+
+
+// ============================================================
+// データ
+// ============================================================
 
 const counts = {
 
     up: {
+
         car: 0,
+
         truck: 0,
+
         bus: 0,
+
         bike: 0,
+
         person: 0,
+
         bicycle: 0
+
     },
 
+
     down: {
+
         car: 0,
+
         truck: 0,
+
         bus: 0,
+
         bike: 0,
+
         person: 0,
+
         bicycle: 0
+
     }
 
 };
 
 
-// ========================================
-// Pythonローカルサーバー
-// ========================================
-
-const SERVER_URL = "http://127.0.0.1:8765";
-
-
-// ========================================
+// ============================================================
 // 種類
-// ========================================
+// ============================================================
 
 const types = [
+
     "car",
+
     "truck",
+
     "bus",
+
     "bike",
+
     "person",
+
     "bicycle"
+
 ];
 
 
 const directions = [
+
     "up",
+
     "down"
+
 ];
 
 
-// ========================================
+// ============================================================
 // Pythonから現在のカウントを取得
-// ========================================
+// ============================================================
 
 async function loadCounts() {
 
     try {
 
         const response = await fetch(
+
             `${SERVER_URL}/state`,
+
             {
                 cache: "no-store"
             }
+
         );
 
+
         if (!response.ok) {
-            throw new Error("通信エラー");
+
+            throw new Error(
+                "Pythonサーバー通信エラー"
+            );
+
         }
 
-        const data = await response.json();
+
+        const data =
+            await response.json();
 
 
-        directions.forEach(direction => {
+        directions.forEach(
+            direction => {
 
-            types.forEach(type => {
+                types.forEach(
+                    type => {
 
-                if (
-                    data[direction] &&
-                    typeof data[direction][type] === "number"
-                ) {
+                        if (
 
-                    counts[direction][type] =
-                        data[direction][type];
+                            data[direction] &&
 
-                }
+                            typeof data[
+                                direction
+                            ][type] === "number"
 
-            });
+                        ) {
 
-        });
+                            counts[
+                                direction
+                            ][type] =
+                                data[
+                                    direction
+                                ][type];
+
+                        }
+
+                    }
+                );
+
+            }
+        );
 
 
         updateAllDisplay();
 
 
     } catch (error) {
+
+        // Pythonが起動していない場合などは
+        // エラーを画面には表示しない
 
         console.log(
             "Pythonサーバーに接続できません。",
@@ -108,9 +165,9 @@ async function loadCounts() {
 }
 
 
-// ========================================
+// ============================================================
 // ＋／－ボタン
-// ========================================
+// ============================================================
 
 async function changeCount(
     direction,
@@ -119,6 +176,7 @@ async function changeCount(
 ) {
 
     let endpoint;
+
 
     if (amount > 0) {
 
@@ -134,17 +192,26 @@ async function changeCount(
     try {
 
         const response = await fetch(
+
             `${SERVER_URL}/${endpoint}` +
+
             `?direction=${direction}` +
+
             `&type=${type}`,
+
             {
                 cache: "no-store"
             }
+
         );
 
 
         if (!response.ok) {
-            throw new Error("カウント変更エラー");
+
+            throw new Error(
+                "カウント変更エラー"
+            );
+
         }
 
 
@@ -163,9 +230,9 @@ async function changeCount(
 }
 
 
-// ========================================
-// 表示更新
-// ========================================
+// ============================================================
+// 数字を画面に表示
+// ============================================================
 
 function updateDisplay(
     direction,
@@ -179,32 +246,44 @@ function updateDisplay(
 
 
     if (!element) {
+
         return;
+
     }
 
 
     element.textContent =
-        counts[direction][type];
+        counts[
+            direction
+        ][type];
 
 }
 
 
-// ========================================
-// 合計更新
-// ========================================
+// ============================================================
+// 合計を更新
+// ============================================================
 
-function updateTotal(direction) {
+function updateTotal(
+    direction
+) {
 
     const data =
         counts[direction];
 
 
     const total =
+
         data.car +
+
         data.truck +
+
         data.bus +
+
         data.bike +
+
         data.person +
+
         data.bicycle;
 
 
@@ -224,41 +303,49 @@ function updateTotal(direction) {
 }
 
 
-// ========================================
-// 全表示更新
-// ========================================
+// ============================================================
+// 全表示を更新
+// ============================================================
 
 function updateAllDisplay() {
 
-    directions.forEach(direction => {
+    directions.forEach(
+        direction => {
 
-        types.forEach(type => {
+            types.forEach(
+                type => {
 
-            updateDisplay(
-                direction,
-                type
+                    updateDisplay(
+                        direction,
+                        type
+                    );
+
+                }
             );
 
-        });
 
+            updateTotal(
+                direction
+            );
 
-        updateTotal(direction);
-
-    });
+        }
+    );
 
 }
 
 
-// ========================================
+// ============================================================
 // 全リセット
-// ========================================
+// ============================================================
 
 async function resetAll() {
 
     if (
+
         !confirm(
             "全てのカウントをリセットしますか？"
         )
+
     ) {
 
         return;
@@ -298,18 +385,26 @@ async function resetAll() {
 }
 
 
-// ========================================
-// 0.1秒ごとにPythonと同期
-// ========================================
+// ============================================================
+// Pythonと定期的に同期
+//
+// 以前：100ms
+// 現在：500ms
+//
+// PCへの負荷を下げるため500msに変更
+// ============================================================
 
 setInterval(
+
     loadCounts,
-    100
+
+    500
+
 );
 
 
-// ========================================
-// 起動時
-// ========================================
+// ============================================================
+// ページ読み込み時
+// ============================================================
 
 loadCounts();
