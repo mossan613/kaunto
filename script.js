@@ -4,7 +4,7 @@
 
 
 // ============================================================
-// Pythonローカルサーバー
+// Pythonサーバー
 // ============================================================
 
 const SERVER_URL =
@@ -12,7 +12,7 @@ const SERVER_URL =
 
 
 // ============================================================
-// データ
+// カウント
 // ============================================================
 
 const counts = {
@@ -20,32 +20,21 @@ const counts = {
     up: {
 
         car: 0,
-
         truck: 0,
-
         bus: 0,
-
         bike: 0,
-
         person: 0,
-
         bicycle: 0
 
     },
 
-
     down: {
 
         car: 0,
-
         truck: 0,
-
         bus: 0,
-
         bike: 0,
-
         person: 0,
-
         bicycle: 0
 
     }
@@ -60,15 +49,10 @@ const counts = {
 const types = [
 
     "car",
-
     "truck",
-
     "bus",
-
     "bike",
-
     "person",
-
     "bicycle"
 
 ];
@@ -77,161 +61,13 @@ const types = [
 const directions = [
 
     "up",
-
     "down"
 
 ];
 
 
 // ============================================================
-// Pythonから現在のカウントを取得
-// ============================================================
-
-async function loadCounts() {
-
-    try {
-
-        const response = await fetch(
-
-            `${SERVER_URL}/state`,
-
-            {
-                cache: "no-store"
-            }
-
-        );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Pythonサーバー通信エラー"
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        directions.forEach(
-            direction => {
-
-                types.forEach(
-                    type => {
-
-                        if (
-
-                            data[direction] &&
-
-                            typeof data[
-                                direction
-                            ][type] === "number"
-
-                        ) {
-
-                            counts[
-                                direction
-                            ][type] =
-                                data[
-                                    direction
-                                ][type];
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-
-        updateAllDisplay();
-
-
-    } catch (error) {
-
-        // Pythonが起動していない場合などは
-        // エラーを画面には表示しない
-
-        console.log(
-            "Pythonサーバーに接続できません。",
-            error
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// ＋／－ボタン
-// ============================================================
-
-async function changeCount(
-    direction,
-    type,
-    amount
-) {
-
-    let endpoint;
-
-
-    if (amount > 0) {
-
-        endpoint = "increment";
-
-    } else {
-
-        endpoint = "decrement";
-
-    }
-
-
-    try {
-
-        const response = await fetch(
-
-            `${SERVER_URL}/${endpoint}` +
-
-            `?direction=${direction}` +
-
-            `&type=${type}`,
-
-            {
-                cache: "no-store"
-            }
-
-        );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "カウント変更エラー"
-            );
-
-        }
-
-
-        await loadCounts();
-
-
-    } catch (error) {
-
-        console.error(
-            "カウント変更エラー:",
-            error
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// 数字を画面に表示
+// 画面更新
 // ============================================================
 
 function updateDisplay(
@@ -261,7 +97,7 @@ function updateDisplay(
 
 
 // ============================================================
-// 合計を更新
+// 合計更新
 // ============================================================
 
 function updateTotal(
@@ -304,7 +140,7 @@ function updateTotal(
 
 
 // ============================================================
-// 全表示を更新
+// 全画面更新
 // ============================================================
 
 function updateAllDisplay() {
@@ -335,7 +171,196 @@ function updateAllDisplay() {
 
 
 // ============================================================
-// 全リセット
+// Pythonからデータを受け取る
+// ============================================================
+
+function applyCounts(
+    newCounts
+) {
+
+    if (!newCounts) {
+
+        return;
+
+    }
+
+
+    directions.forEach(
+        direction => {
+
+            if (!newCounts[direction]) {
+
+                return;
+
+            }
+
+
+            types.forEach(
+                type => {
+
+                    if (
+                        typeof
+                        newCounts[
+                            direction
+                        ][type]
+                        === "number"
+                    ) {
+
+                        counts[
+                            direction
+                        ][type] =
+                            newCounts[
+                                direction
+                            ][type];
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    updateAllDisplay();
+
+}
+
+
+// ============================================================
+// SSE接続
+// ============================================================
+
+function connectEvents() {
+
+    const eventSource =
+        new EventSource(
+            `${SERVER_URL}/events`
+        );
+
+
+    // --------------------------------------------------------
+    // 接続成功
+    // --------------------------------------------------------
+
+    eventSource.onopen =
+        function() {
+
+            console.log(
+                "Pythonサーバー接続：ON"
+            );
+
+        };
+
+
+    // --------------------------------------------------------
+    // Pythonからデータ受信
+    // --------------------------------------------------------
+
+    eventSource.onmessage =
+        function(event) {
+
+            try {
+
+                const data =
+                    JSON.parse(
+                        event.data
+                    );
+
+
+                if (data.counts) {
+
+                    applyCounts(
+                        data.counts
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "データ処理エラー:",
+                    error
+                );
+
+            }
+
+        };
+
+
+    // --------------------------------------------------------
+    // 接続エラー
+    // --------------------------------------------------------
+
+    eventSource.onerror =
+        function() {
+
+            console.log(
+                "Pythonサーバー接続待機中..."
+            );
+
+        };
+
+}
+
+
+// ============================================================
+// ＋／－ボタン
+// ============================================================
+
+async function changeCount(
+    direction,
+    type,
+    amount
+) {
+
+    const endpoint =
+        amount > 0
+            ? "increment"
+            : "decrement";
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                `${SERVER_URL}/${endpoint}` +
+
+                `?direction=${direction}` +
+
+                `&type=${type}`
+
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "通信エラー"
+            );
+
+        }
+
+
+        // SSEから即座に画面更新されるので
+        // ここではloadCountsしない
+
+
+    } catch (error) {
+
+        console.error(
+            "カウント変更エラー:",
+            error
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// リセット
 // ============================================================
 
 async function resetAll() {
@@ -370,9 +395,6 @@ async function resetAll() {
         }
 
 
-        await loadCounts();
-
-
     } catch (error) {
 
         console.error(
@@ -386,25 +408,7 @@ async function resetAll() {
 
 
 // ============================================================
-// Pythonと定期的に同期
-//
-// 以前：100ms
-// 現在：500ms
-//
-// PCへの負荷を下げるため500msに変更
+// 起動
 // ============================================================
 
-setInterval(
-
-    loadCounts,
-
-    500
-
-);
-
-
-// ============================================================
-// ページ読み込み時
-// ============================================================
-
-loadCounts();
+connectEvents();
