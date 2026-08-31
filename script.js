@@ -3,13 +3,11 @@
 // HTML + CSS + JavaScriptのみで動作
 // ============================================================
 
-
 // ============================================================
 // localStorageの保存キー
 // ============================================================
 
 const STORAGE_KEY = "traffic_counts";
-
 
 // ============================================================
 // カウントデータ
@@ -17,40 +15,40 @@ const STORAGE_KEY = "traffic_counts";
 
 const counts = {
 
-    up: {
+up: {
 
-        car: 0,
+    car: 0,
 
-        truck: 0,
+    truck: 0,
 
-        bus: 0,
+    bus: 0,
 
-        bike: 0,
+    bike: 0,
 
-        person: 0,
+    person: 0,
 
-        bicycle: 0
+    bicycle: 0
 
-    },
+},
 
-    down: {
+down: {
 
-        car: 0,
+    car: 0,
 
-        truck: 0,
+    truck: 0,
 
-        bus: 0,
+    bus: 0,
 
-        bike: 0,
+    bike: 0,
 
-        person: 0,
+    person: 0,
 
-        bicycle: 0
+    bicycle: 0
 
-    }
+}
+
 
 };
-
 
 // ============================================================
 // 種類
@@ -58,20 +56,20 @@ const counts = {
 
 const types = [
 
-    "car",
+"car",
 
-    "truck",
+"truck",
 
-    "bus",
+"bus",
 
-    "bike",
+"bike",
 
-    "person",
+"person",
 
-    "bicycle"
+"bicycle"
+
 
 ];
-
 
 // ============================================================
 // 方向
@@ -79,12 +77,33 @@ const types = [
 
 const directions = [
 
-    "up",
+"up",
 
-    "down"
+"down"
+
 
 ];
 
+// ============================================================
+// 日本語名称
+// ============================================================
+
+const typeNames = {
+
+car: "普通車",
+
+truck: "トラック",
+
+bus: "バス",
+
+bike: "バイク",
+
+person: "歩行者",
+
+bicycle: "自転車"
+
+
+};
 
 // ============================================================
 // キーボード設定
@@ -92,77 +111,68 @@ const directions = [
 
 const KEY_MAP = {
 
-    // -------------------------
-    // 上り
-    // -------------------------
+"1": [
+    "up",
+    "car"
+],
 
-    "1": [
-        "up",
-        "car"
-    ],
+"2": [
+    "up",
+    "truck"
+],
 
-    "2": [
-        "up",
-        "truck"
-    ],
+"3": [
+    "up",
+    "bus"
+],
 
-    "3": [
-        "up",
-        "bus"
-    ],
+"4": [
+    "up",
+    "bike"
+],
 
-    "4": [
-        "up",
-        "bike"
-    ],
+"5": [
+    "up",
+    "person"
+],
 
-    "5": [
-        "up",
-        "person"
-    ],
+"6": [
+    "up",
+    "bicycle"
+],
 
-    "6": [
-        "up",
-        "bicycle"
-    ],
+"q": [
+    "down",
+    "car"
+],
 
+"w": [
+    "down",
+    "truck"
+],
 
-    // -------------------------
-    // 下り
-    // -------------------------
+"e": [
+    "down",
+    "bus"
+],
 
-    "q": [
-        "down",
-        "car"
-    ],
+"r": [
+    "down",
+    "bike"
+],
 
-    "w": [
-        "down",
-        "truck"
-    ],
+"t": [
+    "down",
+    "person"
+],
 
-    "e": [
-        "down",
-        "bus"
-    ],
+"y": [
+    "down",
+    "bicycle"
+]
 
-    "r": [
-        "down",
-        "bike"
-    ],
-
-    "t": [
-        "down",
-        "person"
-    ],
-
-    "y": [
-        "down",
-        "bicycle"
-    ]
 
 };
-
 
 // ============================================================
 // データ保存
@@ -170,27 +180,51 @@ const KEY_MAP = {
 
 function saveCounts() {
 
-    try {
+try {
 
-        localStorage.setItem(
+    localStorage.setItem(
 
-            STORAGE_KEY,
+        STORAGE_KEY,
 
-            JSON.stringify(counts)
+        JSON.stringify(counts)
 
-        );
+    );
 
-    } catch (error) {
+    updateSaveStatus("保存済み");
 
-        console.error(
-            "データ保存エラー:",
-            error
-        );
+} catch (error) {
 
-    }
+    console.error(
+        "データ保存エラー:",
+        error
+    );
+
+    updateSaveStatus("保存エラー");
 
 }
 
+
+}
+
+// ============================================================
+// 保存状態表示
+// ============================================================
+
+function updateSaveStatus(message) {
+
+const element =
+    document.getElementById("save-status");
+
+if (!element) {
+
+    return;
+
+}
+
+element.textContent = message;
+
+
+}
 
 // ============================================================
 // データ読み込み
@@ -198,173 +232,163 @@ function saveCounts() {
 
 function loadCounts() {
 
-    try {
+try {
 
-        const savedData =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
-
-
-        // 保存データがない場合
-
-        if (!savedData) {
-
-            return;
-
-        }
-
-
-        const data =
-            JSON.parse(
-                savedData
-            );
-
-
-        // -------------------------
-        // 上り・下り
-        // -------------------------
-
-        directions.forEach(
-            direction => {
-
-                if (
-                    !data[direction]
-                    ||
-                    typeof data[direction] !== "object"
-                ) {
-
-                    return;
-
-                }
-
-
-                // -------------------------
-                // 車種
-                // -------------------------
-
-                types.forEach(
-                    type => {
-
-                        const value =
-                            data[
-                                direction
-                            ][type];
-
-
-                        if (
-                            typeof value === "number"
-                            &&
-                            Number.isInteger(value)
-                            &&
-                            value >= 0
-                        ) {
-
-                            counts[
-                                direction
-                            ][type] = value;
-
-                        }
-
-                    }
-                );
-
-            }
+    const savedData =
+        localStorage.getItem(
+            STORAGE_KEY
         );
 
 
-        console.log(
-            "保存データを読み込みました。"
-        );
+    if (!savedData) {
 
-
-    } catch (error) {
-
-        console.error(
-            "データ読み込みエラー:",
-            error
-        );
+        return;
 
     }
 
+
+    const data =
+        JSON.parse(
+            savedData
+        );
+
+
+    directions.forEach(
+        direction => {
+
+            if (
+                !data[direction]
+                ||
+                typeof data[direction] !== "object"
+            ) {
+
+                return;
+
+            }
+
+
+            types.forEach(
+                type => {
+
+                    const value =
+                        data[
+                            direction
+                        ][type];
+
+
+                    if (
+                        typeof value === "number"
+                        &&
+                        Number.isInteger(value)
+                        &&
+                        value >= 0
+                    ) {
+
+                        counts[
+                            direction
+                        ][type] = value;
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    console.log(
+        "保存データを読み込みました。"
+    );
+
+
+} catch (error) {
+
+    console.error(
+        "データ読み込みエラー:",
+        error
+    );
+
 }
 
+
+}
 
 // ============================================================
 // 画面のカウント表示を更新
 // ============================================================
 
 function updateDisplay(
-    direction,
-    type
+direction,
+type
 ) {
 
-    const element =
-        document.getElementById(
-            `${direction}-${type}`
-        );
+const element =
+    document.getElementById(
+        `${direction}-${type}`
+    );
 
 
-    if (!element) {
+if (!element) {
 
-        return;
-
-    }
-
-
-    element.textContent =
-        counts[
-            direction
-        ][type];
+    return;
 
 }
 
+
+element.textContent =
+    counts[
+        direction
+    ][type];
+
+
+}
 
 // ============================================================
 // 合計を更新
 // ============================================================
 
 function updateTotal(
-    direction
+direction
 ) {
 
-    const data =
-        counts[direction];
+const data =
+    counts[direction];
 
 
-    const total =
+const total =
 
-        data.car +
+    data.car +
 
-        data.truck +
+    data.truck +
 
-        data.bus +
+    data.bus +
 
-        data.bike +
+    data.bike +
 
-        data.person +
+    data.person +
 
-        data.bicycle;
-
-
-    const element =
-        document.getElementById(
-            `${direction}-total`
-        );
+    data.bicycle;
 
 
-    if (!element) {
+const element =
+    document.getElementById(
+        `${direction}-total`
+    );
 
-        return;
 
-    }
+if (!element) {
 
-
-    element.textContent =
-        total;
+    return;
 
 }
 
+
+element.textContent =
+    total;
+
+
+}
 
 // ============================================================
 // 全ての表示を更新
@@ -372,118 +396,94 @@ function updateTotal(
 
 function updateAllDisplay() {
 
-    directions.forEach(
-        direction => {
+directions.forEach(
+    direction => {
 
-            types.forEach(
-                type => {
+        types.forEach(
+            type => {
 
-                    updateDisplay(
-                        direction,
-                        type
-                    );
+                updateDisplay(
+                    direction,
+                    type
+                );
 
-                }
-            );
+            }
+        );
 
 
-            updateTotal(
-                direction
-            );
+        updateTotal(
+            direction
+        );
 
-        }
-    );
+    }
+);
+
 
 }
-
 
 // ============================================================
 // カウント変更
 // ============================================================
 
 function changeCount(
-    direction,
-    type,
-    amount
+direction,
+type,
+amount
 ) {
 
-    // -------------------------
-    // 不正な方向を防止
-    // -------------------------
+if (
+    !counts[direction]
+) {
 
-    if (
-        !counts[direction]
-    ) {
-
-        return;
-
-    }
-
-
-    // -------------------------
-    // 不正な種類を防止
-    // -------------------------
-
-    if (
-        typeof counts[
-            direction
-        ][type] !== "number"
-    ) {
-
-        return;
-
-    }
-
-
-    // -------------------------
-    // カウント変更
-    // -------------------------
-
-    counts[
-        direction
-    ][type] += amount;
-
-
-    // -------------------------
-    // 0未満にならないようにする
-    // -------------------------
-
-    if (
-        counts[
-            direction
-        ][type] < 0
-    ) {
-
-        counts[
-            direction
-        ][type] = 0;
-
-    }
-
-
-    // -------------------------
-    // 画面更新
-    // -------------------------
-
-    updateDisplay(
-        direction,
-        type
-    );
-
-
-    updateTotal(
-        direction
-    );
-
-
-    // -------------------------
-    // 保存
-    // -------------------------
-
-    saveCounts();
+    return;
 
 }
 
+
+if (
+    typeof counts[
+        direction
+    ][type] !== "number"
+) {
+
+    return;
+
+}
+
+
+counts[
+    direction
+][type] += amount;
+
+
+if (
+    counts[
+        direction
+    ][type] < 0
+) {
+
+    counts[
+        direction
+    ][type] = 0;
+
+}
+
+
+updateDisplay(
+    direction,
+    type
+);
+
+
+updateTotal(
+    direction
+);
+
+
+saveCounts();
+
+
+}
 
 // ============================================================
 // 全てリセット
@@ -491,168 +491,351 @@ function changeCount(
 
 function resetAll() {
 
-    const result =
-        window.confirm(
-            "全てのカウントをリセットしますか？"
+const result =
+    window.confirm(
+        "全てのカウントをリセットしますか？"
+    );
+
+
+if (!result) {
+
+    return;
+
+}
+
+
+directions.forEach(
+    direction => {
+
+        types.forEach(
+            type => {
+
+                counts[
+                    direction
+                ][type] = 0;
+
+            }
         );
 
+    }
+);
 
-    if (!result) {
+
+updateAllDisplay();
+
+saveCounts();
+
+console.log(
+    "全てのカウントをリセットしました。"
+);
+
+
+}
+
+// ============================================================
+// CSV出力
+// ============================================================
+
+function exportCSV() {
+
+// ----------------------------------------
+// CSVのデータを作成
+// ----------------------------------------
+
+const rows = [
+
+    [
+        "方向",
+        "種類",
+        "カウント"
+    ]
+
+];
+
+
+// ----------------------------------------
+// 上り
+// ----------------------------------------
+
+types.forEach(
+    type => {
+
+        rows.push([
+
+            "上り",
+
+            typeNames[type],
+
+            counts.up[type]
+
+        ]);
+
+    }
+);
+
+
+// ----------------------------------------
+// 下り
+// ----------------------------------------
+
+types.forEach(
+    type => {
+
+        rows.push([
+
+            "下り",
+
+            typeNames[type],
+
+            counts.down[type]
+
+        ]);
+
+    }
+);
+
+
+// ----------------------------------------
+// CSV文字列へ変換
+// ----------------------------------------
+
+const csv = rows
+    .map(
+        row => {
+
+            return row
+                .map(
+                    value => {
+
+                        const text =
+                            String(
+                                value ?? ""
+                            );
+
+                        return `"${text.replace(
+                            /"/g,
+                            '""'
+                        )}"`;
+
+                    }
+                )
+                .join(",");
+
+        }
+    )
+    .join("\r\n");
+
+
+// ----------------------------------------
+// UTF-8 BOMを付ける
+// Excelで日本語を文字化けさせにくくする
+// ----------------------------------------
+
+const blob = new Blob(
+
+    [
+        "\uFEFF",
+        csv
+    ],
+
+    {
+        type:
+            "text/csv;charset=utf-8;"
+    }
+
+);
+
+
+// ----------------------------------------
+// ダウンロードURL作成
+// ----------------------------------------
+
+const url =
+    URL.createObjectURL(blob);
+
+
+// ----------------------------------------
+// ファイル名
+// ----------------------------------------
+
+const now =
+    new Date();
+
+
+const year =
+    now.getFullYear();
+
+
+const month =
+    String(
+        now.getMonth() + 1
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+const day =
+    String(
+        now.getDate()
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+const hour =
+    String(
+        now.getHours()
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+const minute =
+    String(
+        now.getMinutes()
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+const second =
+    String(
+        now.getSeconds()
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+const filename =
+    `交通量カウント_${year}${month}${day}_${hour}${minute}${second}.csv`;
+
+
+// ----------------------------------------
+// ダウンロード実行
+// ----------------------------------------
+
+const link =
+    document.createElement("a");
+
+
+link.href =
+    url;
+
+
+link.download =
+    filename;
+
+
+document.body.appendChild(
+    link
+);
+
+
+link.click();
+
+
+link.remove();
+
+
+// ----------------------------------------
+// URLを解放
+// ----------------------------------------
+
+URL.revokeObjectURL(
+    url
+);
+
+
+// ----------------------------------------
+// 保存状態表示
+// ----------------------------------------
+
+updateSaveStatus(
+    "CSVを出力しました"
+);
+
+
+console.log(
+    "CSV出力:",
+    filename
+);
+
+
+}
+
+// ============================================================
+// キーボード入力
+// ============================================================
+
+document.addEventListener(
+"keydown",
+function(event) {
+
+    if (
+
+        event.target.tagName === "INPUT"
+
+        ||
+
+        event.target.tagName === "TEXTAREA"
+
+        ||
+
+        event.target.isContentEditable
+
+    ) {
 
         return;
 
     }
 
 
-    // -------------------------
-    // 全カウントを0にする
-    // -------------------------
+    if (
+        event.repeat
+    ) {
 
-    directions.forEach(
-        direction => {
+        return;
 
-            types.forEach(
-                type => {
-
-                    counts[
-                        direction
-                    ][type] = 0;
-
-                }
-            );
-
-        }
-    );
+    }
 
 
-    // -------------------------
-    // 画面更新
-    // -------------------------
-
-    updateAllDisplay();
+    const key =
+        event.key.toLowerCase();
 
 
-    // -------------------------
-    // 保存
-    // -------------------------
+    if (
+        !KEY_MAP[key]
+    ) {
 
-    saveCounts();
+        return;
+
+    }
 
 
-    console.log(
-        "全てのカウントをリセットしました。"
+    event.preventDefault();
+
+
+    const [
+        direction,
+        type
+    ] = KEY_MAP[key];
+
+
+    changeCount(
+        direction,
+        type,
+        1
     );
 
 }
 
 
-// ============================================================
-// キーボード入力
-// ============================================================
-// 重要：
-// event.repeat が true の場合は無視する。
-// これによってキーを長押ししても1回しか増えない。
-// ============================================================
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        // -------------------------
-        // 入力欄では反応させない
-        // -------------------------
-
-        if (
-
-            event.target.tagName === "INPUT"
-
-            ||
-
-            event.target.tagName === "TEXTAREA"
-
-            ||
-
-            event.target.isContentEditable
-
-        ) {
-
-            return;
-
-        }
-
-
-        // -------------------------
-        // 長押しによる連続入力を防止
-        // -------------------------
-        //
-        // キーを押しっぱなしにすると
-        // ブラウザはkeydownを繰り返し発生させる。
-        //
-        // event.repeat が true の場合、
-        // 2回目以降のkeydownなので無視する。
-        //
-        // -------------------------
-
-        if (
-            event.repeat
-        ) {
-
-            return;
-
-        }
-
-
-        // -------------------------
-        // キーを小文字にする
-        // -------------------------
-
-        const key =
-            event.key.toLowerCase();
-
-
-        // -------------------------
-        // 対応していないキー
-        // -------------------------
-
-        if (
-            !KEY_MAP[key]
-        ) {
-
-            return;
-
-        }
-
-
-        // -------------------------
-        // ブラウザの標準動作を防止
-        // -------------------------
-
-        event.preventDefault();
-
-
-        // -------------------------
-        // 対応する方向・車種を取得
-        // -------------------------
-
-        const [
-            direction,
-            type
-        ] = KEY_MAP[key];
-
-
-        // -------------------------
-        // 1回だけ +1
-        // -------------------------
-
-        changeCount(
-            direction,
-            type,
-            1
-        );
-
-    }
 );
-
 
 // ============================================================
 // ページ起動時
@@ -660,54 +843,44 @@ document.addEventListener(
 
 function initialize() {
 
-    // -------------------------
-    // 保存データを読み込む
-    // -------------------------
+loadCounts();
 
-    loadCounts();
+updateAllDisplay();
 
+console.log(
+    "================================"
+);
 
-    // -------------------------
-    // 画面を更新
-    // -------------------------
+console.log(
+    "交通量カウントシステム起動"
+);
 
-    updateAllDisplay();
+console.log(
+    "================================"
+);
 
+console.log(
+    "キーボード操作：ON"
+);
 
-    // -------------------------
-    // コンソール表示
-    // -------------------------
+console.log(
+    "長押し防止：ON"
+);
 
-    console.log(
-        "================================"
-    );
+console.log(
+    "CSV出力：ON"
+);
 
-    console.log(
-        "交通量カウントシステム起動"
-    );
+console.log(
+    "上り：1 2 3 4 5 6"
+);
 
-    console.log(
-        "================================"
-    );
+console.log(
+    "下り：Q W E R T Y"
+);
 
-    console.log(
-        "キーボード操作：ON"
-    );
-
-    console.log(
-        "長押し防止：ON"
-    );
-
-    console.log(
-        "上り：1 2 3 4 5 6"
-    );
-
-    console.log(
-        "下り：Q W E R T Y"
-    );
 
 }
-
 
 // ============================================================
 // 起動
