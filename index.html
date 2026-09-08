@@ -61,17 +61,6 @@
         </div>
 
         <div class="count-row">
-            <span>歩行者</span>
-            <span class="key">5</span>
-
-            <button onclick="changeCount('up', 'person', -1)">−</button>
-
-            <span id="up-person">0</span>
-
-            <button onclick="changeCount('up', 'person', 1)">＋</button>
-        </div>
-
-        <div class="count-row">
             <span>自転車</span>
             <span class="key">6</span>
 
@@ -81,7 +70,18 @@
 
             <button onclick="changeCount('up', 'bicycle', 1)">＋</button>
         </div>
+    
+        <div class="count-row">
+            <span>歩行者</span>
+            <span class="key">5</span>
 
+            <button onclick="changeCount('up', 'person', -1)">−</button>
+
+            <span id="up-person">0</span>
+
+            <button onclick="changeCount('up', 'person', 1)">＋</button>
+        </div>
+        
         <div class="total">
             上り合計：
             <span id="up-total">0</span>
