@@ -1,504 +1,710 @@
 /* ============================================================
-基本設定
+   基本設定
 ============================================================ */
 
-*{
-box-sizing: border-box;
+* {
+
+    box-sizing: border-box;
+
 }
+
 
 body {
-margin: 0;
 
-padding: 20px;
+    margin: 0;
 
-font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+    padding: 20px;
 
-background-color: #6a727a;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 
-text-align: center;
+    background-color: #6a727a;
 
-color: #222;
+    text-align: center;
 
+    color: #222;
 
 }
 
+
 /* ============================================================
-タイトル
+   タイトル
 ============================================================ */
 
 h1 {
-margin: 0 0 25px 0;
 
-color: #ffffff;
+    margin: 0 0 25px 0;
 
+    color: #ffffff;
 
 }
+
 
 h2 {
-margin: 0 0 25px 0;
+
+    margin: 0 0 25px 0;
+
 }
 
+
 /* ============================================================
-上り・下りコンテナ
+   上り・下りコンテナ
 ============================================================ */
 
 .container {
 
-display: flex;
+    display: flex;
 
-gap: 20px;
+    gap: 20px;
 
-justify-content: center;
+    justify-content: center;
 
-align-items: flex-start;
-
+    align-items: flex-start;
 
 }
 
+
 /* ============================================================
-上り・下りカード
+   上り・下りカード
 ============================================================ */
 
 .direction {
 
-background-color: #ffffff;
+    background-color: #ffffff;
 
-width: 400px;
+    width: 400px;
 
-padding: 20px;
+    padding: 20px;
 
-border-radius: 15px;
+    border-radius: 15px;
 
-box-shadow:
-    0 3px 10px
-    rgba(0, 0, 0, 0.15);
-
+    box-shadow:
+        0 3px 10px
+        rgba(0, 0, 0, 0.15);
 
 }
 
+
 /* ============================================================
-見出し
+   見出し
 ============================================================ */
 
 .up h2 {
 
-color: #1976d2;
-
+    color: #1976d2;
 
 }
+
 
 .down h2 {
 
-color: #d32f2f;
-
+    color: #d32f2f;
 
 }
 
+
 /* ============================================================
-カウント行
+   カウント行
 ============================================================ */
 
 .count-row {
 
-display: grid;
-
-grid-template-columns:
-    100px
-    40px
-    50px
-    70px
-    50px;
-
-align-items: center;
-
-justify-content: center;
-
-gap: 8px;
-
-margin: 12px 0;
-
-font-size: 18px;
-
-
-}
-
-/* ============================================================
-キーボード表示
-============================================================ */
-
-.key {
-
-width: 35px;
-
-height: 35px;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-background-color: #333333;
-
-color: #ffffff;
-
-border-radius: 6px;
-
-font-size: 16px;
-
-font-weight: bold;
-
-
-}
-
-/* ============================================================
-＋・－ボタン
-============================================================ */
-
-.count-row button {
-
-width: 50px;
-
-height: 45px;
-
-font-size: 24px;
-
-font-weight: bold;
-
-border: none;
-
-border-radius: 8px;
-
-background-color: #eeeeee;
-
-cursor: pointer;
-
-touch-action: manipulation;
-
-transition:
-    background-color 0.1s,
-    transform 0.1s;
-
-
-}
-
-.count-row button:hover {
-
-background-color: #cccccc;
-
-
-}
-
-.count-row button:active {
-
-background-color: #aaaaaa;
-
-transform: scale(0.95);
-
-
-}
-
-/* ============================================================
-カウント数字
-============================================================ */
-
-.count-row span[id] {
-
-font-size: 24px;
-
-font-weight: bold;
-
-min-width: 60px;
-
-
-}
-
-/* ============================================================
-合計
-============================================================ */
-
-.total {
-
-margin-top: 20px;
-
-padding: 15px;
-
-background-color: #eeeeee;
-
-border-radius: 10px;
-
-font-size: 20px;
-
-font-weight: bold;
-
-
-}
-
-/* ============================================================
-操作ボタン
-============================================================ */
-
-.control-buttons {
-
-display: flex;
-
-justify-content: center;
-
-align-items: center;
-
-gap: 15px;
-
-margin-top: 25px;
-
-
-}
-
-/* ============================================================
-CSV出力ボタン
-============================================================ */
-
-.csv-button {
-
-padding: 15px 35px;
-
-font-size: 18px;
-
-font-weight: bold;
-
-color: #ffffff;
-
-background-color: #1976d2;
-
-border: none;
-
-border-radius: 10px;
-
-cursor: pointer;
-
-transition:
-    background-color 0.1s,
-    transform 0.1s;
-
-
-}
-
-.csv-button:hover {
-
-background-color: #1565c0;
-
-
-}
-
-.csv-button:active {
-
-background-color: #0d47a1;
-
-transform: scale(0.97);
-
-
-}
-
-/* ============================================================
-リセットボタン
-============================================================ */
-
-.reset {
-
-padding: 15px 35px;
-
-font-size: 18px;
-
-font-weight: bold;
-
-color: #ffffff;
-
-background-color: #555555;
-
-border: none;
-
-border-radius: 10px;
-
-cursor: pointer;
-
-transition:
-    background-color 0.1s,
-    transform 0.1s;
-
-
-}
-
-.reset:hover {
-
-background-color: #333333;
-
-
-}
-
-.reset:active {
-
-background-color: #222222;
-
-transform: scale(0.97);
-
-
-}
-
-/* ============================================================
-保存状態
-============================================================ */
-
-.save-status {
-
-margin-top: 15px;
-
-color: #ffffff;
-
-font-size: 14px;
-
-
-}
-
-/* ============================================================
-スマホ・タブレット
-============================================================ */
-
-@media (max-width: 850px) {
-
-body {
-
-    padding: 10px;
-
-}
-
-
-h1 {
-
-    font-size: 28px;
-
-}
-
-
-.container {
-
-    flex-direction: column;
+    display: grid;
+
+    grid-template-columns:
+        100px
+        40px
+        50px
+        70px
+        50px;
 
     align-items: center;
 
-}
+    justify-content: center;
 
+    gap: 8px;
 
-.direction {
-
-    width: 100%;
-
-    max-width: 500px;
-
-}
-
-
-}
-
-/* ============================================================
-小さいスマホ
-============================================================ */
-
-@media (max-width: 450px) {
-
-h1 {
-
-    font-size: 24px;
-
-    margin-bottom: 15px;
-
-}
-
-
-.direction {
-
-    padding: 15px;
-
-}
-
-
-.count-row {
-
-    grid-template-columns:
-        80px
-        35px
-        45px
-        60px
-        45px;
-
-    gap: 5px;
-
-    font-size: 16px;
-
-}
-
-
-.count-row button {
-
-    width: 45px;
-
-    height: 45px;
-
-    font-size: 22px;
-
-}
-
-
-.count-row span[id] {
-
-    font-size: 22px;
-
-    min-width: 50px;
-
-}
-
-
-.key {
-
-    width: 32px;
-
-    height: 32px;
-
-    font-size: 14px;
-
-}
-
-
-.total {
+    margin: 12px 0;
 
     font-size: 18px;
 
 }
 
 
+/* ============================================================
+   キーボード表示・設定ボタン
+============================================================ */
+
+.key {
+
+    width: 35px;
+
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0;
+
+    background-color: #333333;
+
+    color: #ffffff;
+
+    border: none;
+
+    border-radius: 6px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+
+    transition:
+        background-color 0.15s,
+        transform 0.1s,
+        box-shadow 0.15s;
+
+}
+
+
+.key:hover {
+
+    background-color: #555555;
+
+    transform: translateY(-1px);
+
+}
+
+
+.key:active {
+
+    transform: scale(0.95);
+
+}
+
+
+/* ============================================================
+   キー設定中
+============================================================ */
+
+.key.setting {
+
+    background-color: #1976d2;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(25, 118, 210, 0.3);
+
+    animation:
+        key-pulse 1s infinite;
+
+}
+
+
+@keyframes key-pulse {
+
+    0% {
+
+        box-shadow:
+            0 0 0 2px
+            rgba(25, 118, 210, 0.2);
+
+    }
+
+    50% {
+
+        box-shadow:
+            0 0 0 6px
+            rgba(25, 118, 210, 0.4);
+
+    }
+
+    100% {
+
+        box-shadow:
+            0 0 0 2px
+            rgba(25, 118, 210, 0.2);
+
+    }
+
+}
+
+
+/* ============================================================
+   ＋・－ボタン
+============================================================ */
+
+.count-row button:not(.key) {
+
+    width: 50px;
+
+    height: 45px;
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background-color: #eeeeee;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+
+    transition:
+        background-color 0.1s,
+        transform 0.1s;
+
+}
+
+
+.count-row button:not(.key):hover {
+
+    background-color: #cccccc;
+
+}
+
+
+.count-row button:not(.key):active {
+
+    background-color: #aaaaaa;
+
+    transform: scale(0.95);
+
+}
+
+
+/* ============================================================
+   カウント数字
+============================================================ */
+
+.count-row span[id] {
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    min-width: 60px;
+
+}
+
+
+/* ============================================================
+   合計
+============================================================ */
+
+.total {
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    background-color: #eeeeee;
+
+    border-radius: 10px;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
+
+
+/* ============================================================
+   操作ボタン
+============================================================ */
+
 .control-buttons {
 
-    flex-direction: column;
+    display: flex;
 
-    width: 90%;
+    justify-content: center;
 
-    max-width: 350px;
+    align-items: center;
 
-    margin-left: auto;
+    gap: 15px;
 
-    margin-right: auto;
+    margin-top: 25px;
 
 }
 
 
-.csv-button,
+/* ============================================================
+   CSV出力ボタン
+============================================================ */
+
+.csv-button {
+
+    padding: 15px 35px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    color: #ffffff;
+
+    background-color: #1976d2;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+
+    transition:
+        background-color 0.1s,
+        transform 0.1s;
+
+}
+
+
+.csv-button:hover {
+
+    background-color: #1565c0;
+
+}
+
+
+.csv-button:active {
+
+    background-color: #0d47a1;
+
+    transform: scale(0.97);
+
+}
+
+
+/* ============================================================
+   リセットボタン
+============================================================ */
+
 .reset {
 
-    width: 100%;
+    padding: 15px 35px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    color: #ffffff;
+
+    background-color: #555555;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+
+    transition:
+        background-color 0.1s,
+        transform 0.1s;
 
 }
 
+
+.reset:hover {
+
+    background-color: #333333;
+
+}
+
+
+.reset:active {
+
+    background-color: #222222;
+
+    transform: scale(0.97);
+
+}
+
+
+/* ============================================================
+   キー設定エリア
+============================================================ */
+
+.key-settings {
+
+    margin-top: 20px;
+
+    text-align: center;
+
+}
+
+
+/* ============================================================
+   キー設定メッセージ
+============================================================ */
+
+#key-setting-status {
+
+    display: inline-block;
+
+    padding: 10px 20px;
+
+    color: #ffffff;
+
+    background-color:
+        rgba(0, 0, 0, 0.25);
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    transition:
+        background-color 0.2s,
+        transform 0.2s;
+
+}
+
+
+#key-setting-status.active {
+
+    background-color: #1976d2;
+
+    font-weight: bold;
+
+    transform: scale(1.03);
+
+}
+
+
+/* ============================================================
+   キー設定初期化ボタン
+============================================================ */
+
+.key-reset {
+
+    display: block;
+
+    margin: 10px auto 0 auto;
+
+    padding: 10px 20px;
+
+    color: #ffffff;
+
+    background-color: #777777;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+
+    transition:
+        background-color 0.1s,
+        transform 0.1s;
+
+}
+
+
+.key-reset:hover {
+
+    background-color: #555555;
+
+}
+
+
+.key-reset:active {
+
+    background-color: #333333;
+
+    transform: scale(0.97);
+
+}
+
+
+/* ============================================================
+   保存状態
+============================================================ */
+
+.save-status {
+
+    margin-top: 15px;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+}
+
+
+/* ============================================================
+   スマホ・タブレット
+============================================================ */
+
+@media (max-width: 850px) {
+
+    body {
+
+        padding: 10px;
+
+    }
+
+
+    h1 {
+
+        font-size: 28px;
+
+    }
+
+
+    .container {
+
+        flex-direction: column;
+
+        align-items: center;
+
+    }
+
+
+    .direction {
+
+        width: 100%;
+
+        max-width: 500px;
+
+    }
+
+}
+
+
+/* ============================================================
+   小さいスマホ
+============================================================ */
+
+@media (max-width: 450px) {
+
+    h1 {
+
+        font-size: 24px;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .direction {
+
+        padding: 15px;
+
+    }
+
+
+    .count-row {
+
+        grid-template-columns:
+            80px
+            35px
+            45px
+            60px
+            45px;
+
+        gap: 5px;
+
+        font-size: 16px;
+
+    }
+
+
+    .count-row button:not(.key) {
+
+        width: 45px;
+
+        height: 45px;
+
+        font-size: 22px;
+
+    }
+
+
+    .count-row span[id] {
+
+        font-size: 22px;
+
+        min-width: 50px;
+
+    }
+
+
+    .key {
+
+        width: 32px;
+
+        height: 32px;
+
+        font-size: 14px;
+
+    }
+
+
+    .total {
+
+        font-size: 18px;
+
+    }
+
+
+    .control-buttons {
+
+        flex-direction: column;
+
+        width: 90%;
+
+        max-width: 350px;
+
+        margin-left: auto;
+
+        margin-right: auto;
+
+    }
+
+
+    .csv-button,
+    .reset {
+
+        width: 100%;
+
+    }
+
+
+    #key-setting-status {
+
+        max-width: 90%;
+
+        line-height: 1.5;
+
+    }
+
+
+    .key-reset {
+
+        width: 90%;
+
+        max-width: 350px;
+
+    }
 
 }

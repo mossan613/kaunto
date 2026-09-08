@@ -1,202 +1,537 @@
-<!DOCTYPE html> <html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>交通量カウント</title>
+<!DOCTYPE html>
+<html lang="ja">
 
-<link rel="stylesheet" href="style.css">
+<head>
 
-</head> <body>
-<h1>🚗 交通量カウント</h1>
+    <meta charset="UTF-8">
 
-<div class="container">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <!-- =========================
-         上り
-    ========================== -->
+    <title>交通量カウント</title>
 
-    <section class="direction up">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
-        <h2>⬆ 上り</h2>
+</head>
 
-        <div class="count-row">
-            <span>普通車</span>
-            <span class="key">1</span>
+<body>
 
-            <button onclick="changeCount('up', 'car', -1)">−</button>
 
-            <span id="up-car">0</span>
+    <!-- =====================================================
+         タイトル
+    ====================================================== -->
 
-            <button onclick="changeCount('up', 'car', 1)">＋</button>
+    <h1>🚗 交通量カウント</h1>
+
+
+
+    <!-- =====================================================
+         上り・下り
+    ====================================================== -->
+
+    <div class="container">
+
+
+        <!-- =================================================
+             上り
+        ================================================== -->
+
+        <section class="direction up">
+
+            <h2>⬆ 上り</h2>
+
+
+            <!-- =========================
+                 普通車
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>普通車</span>
+
+                <button
+                    class="key"
+                    data-direction="up"
+                    data-type="car"
+                    type="button"
+                >1</button>
+
+                <button
+                    onclick="changeCount('up', 'car', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="up-car">0</span>
+
+                <button
+                    onclick="changeCount('up', 'car', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 トラック
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>トラック</span>
+
+                <button
+                    class="key"
+                    data-direction="up"
+                    data-type="truck"
+                    type="button"
+                >2</button>
+
+                <button
+                    onclick="changeCount('up', 'truck', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="up-truck">0</span>
+
+                <button
+                    onclick="changeCount('up', 'truck', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 バス
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>バス</span>
+
+                <button
+                    class="key"
+                    data-direction="up"
+                    data-type="bus"
+                    type="button"
+                >3</button>
+
+                <button
+                    onclick="changeCount('up', 'bus', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="up-bus">0</span>
+
+                <button
+                    onclick="changeCount('up', 'bus', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 バイク
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>バイク</span>
+
+                <button
+                    class="key"
+                    data-direction="up"
+                    data-type="bike"
+                    type="button"
+                >4</button>
+
+                <button
+                    onclick="changeCount('up', 'bike', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="up-bike">0</span>
+
+                <button
+                    onclick="changeCount('up', 'bike', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 自転車
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>自転車</span>
+
+                <button
+                    class="key"
+                    data-direction="up"
+                    data-type="bicycle"
+                    type="button"
+                >6</button>
+
+                <button
+                    onclick="changeCount('up', 'bicycle', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="up-bicycle">0</span>
+
+                <button
+                    onclick="changeCount('up', 'bicycle', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 歩行者
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>歩行者</span>
+
+                <button
+                    class="key"
+                    data-direction="up"
+                    data-type="person"
+                    type="button"
+                >5</button>
+
+                <button
+                    onclick="changeCount('up', 'person', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="up-person">0</span>
+
+                <button
+                    onclick="changeCount('up', 'person', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 上り合計
+            ========================== -->
+
+            <div class="total">
+
+                上り合計：
+
+                <span id="up-total">0</span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             下り
+        ================================================== -->
+
+        <section class="direction down">
+
+            <h2>⬇ 下り</h2>
+
+
+            <!-- =========================
+                 普通車
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>普通車</span>
+
+                <button
+                    class="key"
+                    data-direction="down"
+                    data-type="car"
+                    type="button"
+                >Q</button>
+
+                <button
+                    onclick="changeCount('down', 'car', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="down-car">0</span>
+
+                <button
+                    onclick="changeCount('down', 'car', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 トラック
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>トラック</span>
+
+                <button
+                    class="key"
+                    data-direction="down"
+                    data-type="truck"
+                    type="button"
+                >W</button>
+
+                <button
+                    onclick="changeCount('down', 'truck', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="down-truck">0</span>
+
+                <button
+                    onclick="changeCount('down', 'truck', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 バス
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>バス</span>
+
+                <button
+                    class="key"
+                    data-direction="down"
+                    data-type="bus"
+                    type="button"
+                >E</button>
+
+                <button
+                    onclick="changeCount('down', 'bus', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="down-bus">0</span>
+
+                <button
+                    onclick="changeCount('down', 'bus', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 バイク
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>バイク</span>
+
+                <button
+                    class="key"
+                    data-direction="down"
+                    data-type="bike"
+                    type="button"
+                >R</button>
+
+                <button
+                    onclick="changeCount('down', 'bike', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="down-bike">0</span>
+
+                <button
+                    onclick="changeCount('down', 'bike', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 自転車
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>自転車</span>
+
+                <button
+                    class="key"
+                    data-direction="down"
+                    data-type="bicycle"
+                    type="button"
+                >Y</button>
+
+                <button
+                    onclick="changeCount('down', 'bicycle', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="down-bicycle">0</span>
+
+                <button
+                    onclick="changeCount('down', 'bicycle', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 歩行者
+            ========================== -->
+
+            <div class="count-row">
+
+                <span>歩行者</span>
+
+                <button
+                    class="key"
+                    data-direction="down"
+                    data-type="person"
+                    type="button"
+                >T</button>
+
+                <button
+                    onclick="changeCount('down', 'person', -1)"
+                    type="button"
+                >−</button>
+
+                <span id="down-person">0</span>
+
+                <button
+                    onclick="changeCount('down', 'person', 1)"
+                    type="button"
+                >＋</button>
+
+            </div>
+
+
+            <!-- =========================
+                 下り合計
+            ========================== -->
+
+            <div class="total">
+
+                下り合計：
+
+                <span id="down-total">0</span>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         操作ボタン
+    ====================================================== -->
+
+    <div class="control-buttons">
+
+
+        <!-- CSV出力 -->
+
+        <button
+            class="csv-button"
+            onclick="exportCSV()"
+            type="button"
+        >
+            📥 CSV出力
+        </button>
+
+
+        <!-- 全てリセット -->
+
+        <button
+            class="reset"
+            onclick="resetAll()"
+            type="button"
+        >
+            🔄 全てリセット
+        </button>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         キー設定
+    ====================================================== -->
+
+    <div class="key-settings">
+
+
+        <!-- キー設定状態 -->
+
+        <div id="key-setting-status">
+
+            キー表示をクリックすると変更できます
+
         </div>
 
-        <div class="count-row">
-            <span>トラック</span>
-            <span class="key">2</span>
 
-            <button onclick="changeCount('up', 'truck', -1)">−</button>
+        <!-- キー設定初期化 -->
 
-            <span id="up-truck">0</span>
+        <button
+            class="key-reset"
+            onclick="resetKeySettings()"
+            type="button"
+        >
+            ⌨️ キー設定を初期化
+        </button>
 
-            <button onclick="changeCount('up', 'truck', 1)">＋</button>
-        </div>
-
-        <div class="count-row">
-            <span>バス</span>
-            <span class="key">3</span>
-
-            <button onclick="changeCount('up', 'bus', -1)">−</button>
-
-            <span id="up-bus">0</span>
-
-            <button onclick="changeCount('up', 'bus', 1)">＋</button>
-        </div>
-
-        <div class="count-row">
-            <span>バイク</span>
-            <span class="key">4</span>
-
-            <button onclick="changeCount('up', 'bike', -1)">−</button>
-
-            <span id="up-bike">0</span>
-
-            <button onclick="changeCount('up', 'bike', 1)">＋</button>
-        </div>
-
-        <div class="count-row">
-            <span>自転車</span>
-            <span class="key">6</span>
-
-            <button onclick="changeCount('up', 'bicycle', -1)">−</button>
-
-            <span id="up-bicycle">0</span>
-
-            <button onclick="changeCount('up', 'bicycle', 1)">＋</button>
-        </div>
-    
-        <div class="count-row">
-            <span>歩行者</span>
-            <span class="key">5</span>
-
-            <button onclick="changeCount('up', 'person', -1)">−</button>
-
-            <span id="up-person">0</span>
-
-            <button onclick="changeCount('up', 'person', 1)">＋</button>
-        </div>
-        
-        <div class="total">
-            上り合計：
-            <span id="up-total">0</span>
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         下り
-    ========================== -->
-
-    <section class="direction down">
-
-        <h2>⬇ 下り</h2>
-
-        <div class="count-row">
-            <span>普通車</span>
-            <span class="key">Q</span>
-
-            <button onclick="changeCount('down', 'car', -1)">−</button>
-
-            <span id="down-car">0</span>
-
-            <button onclick="changeCount('down', 'car', 1)">＋</button>
-        </div>
-
-        <div class="count-row">
-            <span>トラック</span>
-            <span class="key">W</span>
-
-            <button onclick="changeCount('down', 'truck', -1)">−</button>
-
-            <span id="down-truck">0</span>
-
-            <button onclick="changeCount('down', 'truck', 1)">＋</button>
-        </div>
-
-        <div class="count-row">
-            <span>バス</span>
-            <span class="key">E</span>
-
-            <button onclick="changeCount('down', 'bus', -1)">−</button>
-
-            <span id="down-bus">0</span>
-
-            <button onclick="changeCount('down', 'bus', 1)">＋</button>
-        </div>
-
-        <div class="count-row">
-            <span>バイク</span>
-            <span class="key">R</span>
-
-            <button onclick="changeCount('down', 'bike', -1)">−</button>
-
-            <span id="down-bike">0</span>
-
-            <button onclick="changeCount('down', 'bike', 1)">＋</button>
-        </div>
-        
-        <div class="count-row">
-            <span>自転車</span>
-            <span class="key">Y</span>
-
-            <button onclick="changeCount('down', 'bicycle', -1)">−</button>
-
-            <span id="down-bicycle">0</span>
-
-            <button onclick="changeCount('down', 'bicycle', 1)">＋</button>
-        </div>
-
-          <div class="count-row">
-            <span>歩行者</span>
-            <span class="key">T</span>
-
-            <button onclick="changeCount('down', 'person', -1)">−</button>
-
-            <span id="down-person">0</span>
-
-            <button onclick="changeCount('down', 'person', 1)">＋</button>
-        </div>
-        <div class="total">
-            下り合計：
-            <span id="down-total">0</span>
-        </div>
-
-    </section>
-
-</div>
-
-
-<!-- =========================
-     操作ボタン
-========================== -->
-
-<div class="control-buttons">
-
-    <button class="csv-button" onclick="exportCSV()">
-        📥 CSV出力
-    </button>
-
-    <button class="reset" onclick="resetAll()">
-        🔄 全てリセット
-    </button>
-
-</div>
-
-
-<!-- =========================
-     保存状態
-========================== -->
+    </div>
 
 
 
+    <!-- =====================================================
+         保存状態
+    ====================================================== -->
 
-<script src="script.js"></script>
+    <div class="save-status">
 
-</body> </html>
+        <span id="save-status">
+            保存済み
+        </span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JavaScript
+    ====================================================== -->
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
